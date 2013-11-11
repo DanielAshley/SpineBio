@@ -2,10 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="SpineBio"
-	ProjectGUID="{7464207B-9527-4774-B772-D7E4F5D3256D}"
-	RootNamespace="SpineBio"
-	Keyword="ManagedCProj"
+	Name="socketTest01"
+	ProjectGUID="{7D1E46D9-3717-4FF6-AB78-AB9FE8B29934}"
+	RootNamespace="socketTest01"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -21,8 +20,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
-			ManagedExtensions="2"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -42,11 +40,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
 				WarningLevel="3"
-				DebugInformationFormat="3"
+				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -59,12 +57,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				LinkIncremental="2"
-				IgnoreAllDefaultLibraries="false"
+				AdditionalDependencies="ws2_32.lib"
 				GenerateDebugInformation="true"
-				AssemblyDebug="1"
-				SubSystem="2"
-				EntryPointSymbol="main"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -94,8 +88,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
-			ManagedExtensions="2"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -115,9 +108,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
+				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -132,11 +126,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit)"
-				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="2"
-				EntryPointSymbol="main"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -163,31 +155,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<AssemblyReference
-			RelativePath="System.dll"
-			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.Data.dll"
-			AssemblyName="System.Data, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.Drawing.dll"
-			AssemblyName="System.Drawing, Version=2.0.0.0, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.Windows.Forms.dll"
-			AssemblyName="System.Windows.Forms, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.XML.dll"
-			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
 	</References>
 	<Files>
 		<Filter
@@ -196,32 +163,12 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\AssemblyInfo.cpp"
+				RelativePath=".\main.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SpineBio.cpp"
+				RelativePath=".\SockStream.cpp"
 				>
-			</File>
-			<File
-				RelativePath=".\stdafx.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -230,21 +177,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Form1.h"
-				FileType="3"
-				>
-				<File
-					RelativePath=".\Form1.resX"
-					SubType="Designer"
-					>
-				</File>
-			</File>
-			<File
-				RelativePath=".\resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\stdafx.h"
+				RelativePath=".\SockStream.h"
 				>
 			</File>
 		</Filter>
@@ -253,19 +186,7 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath=".\app.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\app.rc"
-				>
-			</File>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
