@@ -9,6 +9,7 @@ namespace SpineBio {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
+	client_tcpsocket sock;
 
 	/// <summary>
 	/// Summary for Form1
@@ -74,7 +75,8 @@ namespace SpineBio {
 	private: System::Windows::Forms::Label^  labelQuasiStaticTesting;
 	private: System::Windows::Forms::ProgressBar^  progressBar1;
 
-	private: System::Net::Sockets::TcpClient sock;
+	//private: System::Net::Sockets::TcpClient sock;
+
 
 	private: System::Windows::Forms::Button^  buttonConnect;
 	private: System::Windows::Forms::TextBox^  textBoxConnect;
@@ -397,21 +399,26 @@ namespace SpineBio {
 
 	private: bool setupSocket()
 			 {
-				 System::String ^hostname = "192.168.1.2";
-//				 System::Net::Sockets::SocketException e();
-
-				 //this->sock.Connect(hostname, 10002);
-
-				 return this->sock.Connected;
+				 sock.open("192.168.1.2",10002);
+				 this->textBoxConnect->Text = "Socket Open";
+				 return sock.connected();
 			 }
 
 	public: bool stop(){
-				return sendPLC("stop");
+				char command2[] = "stop";
+				return sendPLC(command2, 5);
 			}
 
-	private: bool sendPLC(String^ str){
-				return true;
-				 //sock.
+	private: bool sendPLC(char *buffer, size_t length){
+				 size_t s;
+				 if(sock.can_write())
+				 {
+					 s = sock.write(buffer,length);
+				 }
+				 if(s == length)
+					 return true;
+				 else
+					return false;
 			 }
 
 	 private: String^ getPLC(){

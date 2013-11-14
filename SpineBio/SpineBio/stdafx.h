@@ -3,5 +3,6 @@
 // are changed infrequently
 #pragma once
 
+#include "SockStream.h"
 //#include <sys/socket.h>
 // TODO: reference additional headers your program requires here

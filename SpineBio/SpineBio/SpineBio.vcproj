@@ -59,6 +59,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
 				LinkIncremental="2"
 				IgnoreAllDefaultLibraries="false"
 				GenerateDebugInformation="true"
@@ -200,6 +201,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SockStream.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SpineBio.cpp"
 				>
 			</File>
@@ -241,6 +246,10 @@
 			</File>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SockStream.h"
 				>
 			</File>
 			<File
