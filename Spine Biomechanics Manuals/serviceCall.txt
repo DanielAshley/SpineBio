@@ -1,0 +1,5 @@
+
+11/4/13 - Service call to create ladder logic for TCP connection
+Service Number: 4003430905
+
+Technote - 32962
