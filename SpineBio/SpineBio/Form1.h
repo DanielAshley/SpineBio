@@ -80,6 +80,8 @@ namespace SpineBio {
 
 	private: System::Windows::Forms::Button^  buttonConnect;
 	private: System::Windows::Forms::TextBox^  textBoxConnect;
+	private: System::Windows::Forms::Button^  buttonSend;
+
 
 
 
@@ -121,6 +123,7 @@ namespace SpineBio {
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
 			this->buttonConnect = (gcnew System::Windows::Forms::Button());
 			this->textBoxConnect = (gcnew System::Windows::Forms::TextBox());
+			this->buttonSend = (gcnew System::Windows::Forms::Button());
 			this->groupBoxStepSizeUnits->SuspendLayout();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
@@ -359,11 +362,22 @@ namespace SpineBio {
 			this->textBoxConnect->TabIndex = 20;
 			this->textBoxConnect->Text = L"NC";
 			// 
+			// buttonSend
+			// 
+			this->buttonSend->Location = System::Drawing::Point(253, 184);
+			this->buttonSend->Name = L"buttonSend";
+			this->buttonSend->Size = System::Drawing::Size(57, 26);
+			this->buttonSend->TabIndex = 21;
+			this->buttonSend->Text = L"send";
+			this->buttonSend->UseVisualStyleBackColor = true;
+			this->buttonSend->Click += gcnew System::EventHandler(this, &Form1::buttonSend_Click);
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(322, 330);
+			this->Controls->Add(this->buttonSend);
 			this->Controls->Add(this->textBoxConnect);
 			this->Controls->Add(this->buttonConnect);
 			this->Controls->Add(this->progressBar1);
@@ -441,7 +455,30 @@ namespace SpineBio {
 					 this->textBoxConnect->Text = "Not Connected";
 				 }
 			 }
-	};
+	private: System::Void buttonSend_Click(System::Object^  sender, System::EventArgs^  e) {
+				 int count = 0;
+				 while(sock.connected())
+				 {
+					 if(sock.can_write())
+					 {
+						 
+						 //this->textBoxConnect->Text = "Passed can_write test";
+						 char def[5];
+						 def[0] = 255;
+						 
+						 def[1] = 1;
+						
+						 def[2] = 5;
+						 sock.write(def, 5);
+						 Sleep(2000);
+						 //this->textBoxConnect->Text = count.ToString();
+					 }
+					 else
+						 this->textBoxConnect->Text = "Failed can_write test";
+				 }
+				 this->textBoxConnect->Text = "Failed connection test";
+			 }
+};
 
 }
 
