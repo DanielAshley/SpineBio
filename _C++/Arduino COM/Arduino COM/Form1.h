@@ -121,8 +121,9 @@ namespace ArduinoCOM {
 	private: System::Void continuousRead_Tick(System::Object^  sender, System::EventArgs^  e) {
 				 //this->ReadCOM->Text = "1";
 				 array<wchar_t>^ buff;
-				 this->arduino->Read(buff,0,250);
-				 this->ReadCOM->Text = buff.ToString();
+				 this->ReadCOM->Text = this->arduino->ReadLine();
+				 //this->arduino->Read(buff,0,250);
+				 //this->ReadCOM->Text = buff.ToString();
 			 }
 };
 }
