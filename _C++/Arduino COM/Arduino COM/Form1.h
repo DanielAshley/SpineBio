@@ -39,6 +39,7 @@ namespace ArduinoCOM {
 	private: System::Windows::Forms::Button^  Connect;
 	private: System::Windows::Forms::TextBox^  ReadCOM;
 	private: System::Windows::Forms::TextBox^  portValue;
+	private: System::Windows::Forms::Timer^  continuousRead;
 	private: System::ComponentModel::IContainer^  components;
 
 	private:
@@ -59,6 +60,7 @@ namespace ArduinoCOM {
 			this->Connect = (gcnew System::Windows::Forms::Button());
 			this->ReadCOM = (gcnew System::Windows::Forms::TextBox());
 			this->portValue = (gcnew System::Windows::Forms::TextBox());
+			this->continuousRead = (gcnew System::Windows::Forms::Timer(this->components));
 			this->SuspendLayout();
 			// 
 			// Connect
@@ -88,6 +90,10 @@ namespace ArduinoCOM {
 			this->portValue->TabIndex = 2;
 			this->portValue->Text = L"Enter Port #";
 			// 
+			// continuousRead
+			// 
+			this->continuousRead->Tick += gcnew System::EventHandler(this, &Form1::continuousRead_Tick);
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -105,11 +111,19 @@ namespace ArduinoCOM {
 #pragma endregion
 	private: System::Void Connect_Click(System::Object^  sender, System::EventArgs^  e) {
 				 this->arduino->PortName = "COM5";  // Replace with your COM port!
-				 this->arduino->Open();
-				 this->arduino->Write( "7" );  // In the future,  you'll expand on this
+	//			 this->arduino->Open();
+				 this->continuousRead->Enabled = true;
+				 
+				 //this->arduino->Write( "7" );  // In the future,  you'll expand on this
                                         // to write your custom data to the board
-				 this->arduino->Close();
+				 //this->arduino->Close();
 			 }
-	};
+	private: System::Void continuousRead_Tick(System::Object^  sender, System::EventArgs^  e) {
+				 //this->ReadCOM->Text = "1";
+				 array<wchar_t>^ buff;
+				 this->arduino->Read(buff,0,250);
+				 this->ReadCOM->Text = buff.ToString();
+			 }
+};
 }
 
