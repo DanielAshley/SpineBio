@@ -40,6 +40,7 @@ namespace ArduinoCOM {
 	private: System::Windows::Forms::TextBox^  ReadCOM;
 	private: System::Windows::Forms::TextBox^  portValue;
 	private: System::Windows::Forms::Timer^  continuousRead;
+	private: System::Windows::Forms::Button^  buttonDisconnect;
 	private: System::ComponentModel::IContainer^  components;
 
 	private:
@@ -61,11 +62,16 @@ namespace ArduinoCOM {
 			this->ReadCOM = (gcnew System::Windows::Forms::TextBox());
 			this->portValue = (gcnew System::Windows::Forms::TextBox());
 			this->continuousRead = (gcnew System::Windows::Forms::Timer(this->components));
+			this->buttonDisconnect = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
+			// 
+			// arduino
+			// 
+			this->arduino->PortName = L"COM3";
 			// 
 			// Connect
 			// 
-			this->Connect->Location = System::Drawing::Point(12, 12);
+			this->Connect->Location = System::Drawing::Point(12, 38);
 			this->Connect->Name = L"Connect";
 			this->Connect->Size = System::Drawing::Size(75, 23);
 			this->Connect->TabIndex = 0;
@@ -76,29 +82,40 @@ namespace ArduinoCOM {
 			// ReadCOM
 			// 
 			this->ReadCOM->Enabled = false;
-			this->ReadCOM->Location = System::Drawing::Point(12, 41);
+			this->ReadCOM->Location = System::Drawing::Point(12, 67);
 			this->ReadCOM->Name = L"ReadCOM";
-			this->ReadCOM->Size = System::Drawing::Size(100, 20);
+			this->ReadCOM->Size = System::Drawing::Size(156, 20);
 			this->ReadCOM->TabIndex = 1;
 			this->ReadCOM->Text = L"Read";
 			// 
 			// portValue
 			// 
-			this->portValue->Location = System::Drawing::Point(104, 14);
+			this->portValue->Location = System::Drawing::Point(12, 12);
 			this->portValue->Name = L"portValue";
 			this->portValue->Size = System::Drawing::Size(71, 20);
 			this->portValue->TabIndex = 2;
-			this->portValue->Text = L"Enter Port #";
+			this->portValue->Text = L"COM3";
 			// 
 			// continuousRead
 			// 
 			this->continuousRead->Tick += gcnew System::EventHandler(this, &Form1::continuousRead_Tick);
+			// 
+			// buttonDisconnect
+			// 
+			this->buttonDisconnect->Location = System::Drawing::Point(93, 38);
+			this->buttonDisconnect->Name = L"buttonDisconnect";
+			this->buttonDisconnect->Size = System::Drawing::Size(75, 23);
+			this->buttonDisconnect->TabIndex = 3;
+			this->buttonDisconnect->Text = L"Disconnect";
+			this->buttonDisconnect->UseVisualStyleBackColor = true;
+			this->buttonDisconnect->Click += gcnew System::EventHandler(this, &Form1::buttonDisconnect_Click);
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 262);
+			this->Controls->Add(this->buttonDisconnect);
 			this->Controls->Add(this->portValue);
 			this->Controls->Add(this->ReadCOM);
 			this->Controls->Add(this->Connect);
@@ -110,21 +127,16 @@ namespace ArduinoCOM {
 		}
 #pragma endregion
 	private: System::Void Connect_Click(System::Object^  sender, System::EventArgs^  e) {
-				 this->arduino->PortName = "COM5";  // Replace with your COM port!
-	//			 this->arduino->Open();
+				 this->arduino->PortName = this->portValue->Text;
+				 this->arduino->Open();
 				 this->continuousRead->Enabled = true;
-				 
-				 //this->arduino->Write( "7" );  // In the future,  you'll expand on this
-                                        // to write your custom data to the board
-				 //this->arduino->Close();
 			 }
 	private: System::Void continuousRead_Tick(System::Object^  sender, System::EventArgs^  e) {
-				 //this->ReadCOM->Text = "1";
-				 array<wchar_t>^ buff;
 				 this->ReadCOM->Text = this->arduino->ReadLine();
-				 //this->arduino->Read(buff,0,250);
-				 //this->ReadCOM->Text = buff.ToString();
 			 }
+private: System::Void buttonDisconnect_Click(System::Object^  sender, System::EventArgs^  e) {
+				 this->continuousRead->Enabled = false;
+				 this->arduino->Close();
+		 }
 };
 }
-
