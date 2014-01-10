@@ -130,13 +130,16 @@ namespace ArduinoCOM {
 				 this->arduino->PortName = this->portValue->Text;
 				 this->arduino->Open();
 				 this->continuousRead->Enabled = true;
+				 this->arduino->DiscardInBuffer();
 			 }
 	private: System::Void continuousRead_Tick(System::Object^  sender, System::EventArgs^  e) {
-				 this->ReadCOM->Text = this->arduino->ReadLine();
+				 this->arduino->DiscardInBuffer();
+				 while(this->arduino->ReadBufferSize != 0)
+					 this->ReadCOM->Text = this->arduino->ReadLine();
 			 }
-private: System::Void buttonDisconnect_Click(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void buttonDisconnect_Click(System::Object^  sender, System::EventArgs^  e) {
 				 this->continuousRead->Enabled = false;
 				 this->arduino->Close();
-		 }
+			 }
 };
 }
