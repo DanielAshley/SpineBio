@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace SpineBio {
 
 	using namespace System;
@@ -8,6 +9,10 @@ namespace SpineBio {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	
+	using namespace System::Threading;
+
+
 
 	client_tcpsocket sock;
 	int count;
@@ -82,6 +87,9 @@ namespace SpineBio {
 	private: System::Windows::Forms::Button^  buttonConnect;
 	private: System::Windows::Forms::TextBox^  textBoxConnect;
 	private: System::Windows::Forms::Button^  buttonSend;
+	private: System::IO::Ports::SerialPort^  serialPortArduino;
+	private: System::Windows::Forms::Timer^  timer1;
+	private: System::ComponentModel::IContainer^  components;
 
 
 
@@ -90,7 +98,7 @@ namespace SpineBio {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -99,6 +107,7 @@ namespace SpineBio {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->textBoxStepSize = (gcnew System::Windows::Forms::TextBox());
 			this->textBoxNumOfSteps = (gcnew System::Windows::Forms::TextBox());
 			this->textBoxDwellTime = (gcnew System::Windows::Forms::TextBox());
@@ -125,6 +134,8 @@ namespace SpineBio {
 			this->buttonConnect = (gcnew System::Windows::Forms::Button());
 			this->textBoxConnect = (gcnew System::Windows::Forms::TextBox());
 			this->buttonSend = (gcnew System::Windows::Forms::Button());
+			this->serialPortArduino = (gcnew System::IO::Ports::SerialPort(this->components));
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->groupBoxStepSizeUnits->SuspendLayout();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
@@ -373,6 +384,14 @@ namespace SpineBio {
 			this->buttonSend->UseVisualStyleBackColor = true;
 			this->buttonSend->Click += gcnew System::EventHandler(this, &Form1::buttonSend_Click);
 			// 
+			// serialPortArduino
+			// 
+			this->serialPortArduino->PortName = L"COM3";
+			// 
+			// timer1
+			// 
+			this->timer1->Tick += gcnew System::EventHandler(this, &Form1::timer1_Tick);
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -412,12 +431,23 @@ namespace SpineBio {
 		}
 #pragma endregion
 
-	private: bool setupSocket()
+
+	private: void setupSocket()
 			 {
 				 sock.open("192.168.1.2",10002);
 				 this->textBoxConnect->Text = "Socket Open";
 				 count = 126;
-				 return sock.connected();
+				 
+		//		 Thread piThread = gcnew Thread(gcnew ThreadStart(stop()));            
+		//		 piThread.Start();
+				 if(sock.connected())
+				 {
+					 this->textBoxConnect->Text = "Connected";
+				 }
+				 else
+				 {
+					 this->textBoxConnect->Text = "Not Connected";
+				 }
 			 }
 
 	public: bool stop(){
@@ -448,15 +478,15 @@ namespace SpineBio {
 
 
 	private: System::Void buttonConnect_Click(System::Object^  sender, System::EventArgs^  e) {
-				 if(setupSocket())
-				 {
-					 this->textBoxConnect->Text = "Connected";
-				 }
-				 else
-				 {
-					 this->textBoxConnect->Text = "Not Connected";
-				 }
+				 //Thread^ oThread = gcnew Thread( gcnew ThreadStart( this, &Form1::ThreadMethod ) );
+				 //oThread->Start();
+				 setupSocket();
 			 }
+
+	private: void ThreadMethod() {   
+					this->Invoke(gcnew MethodInvoker(this, &Form1::setupSocket));
+	}
+
 	private: System::Void buttonSend_Click(System::Object^  sender, System::EventArgs^  e) {
 				 
 				 //while(sock.connected())
@@ -496,6 +526,9 @@ namespace SpineBio {
 				 //this->textBoxConnect->Text = "Failed connection test";
 					 count--;
 			 }
+private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
+			 // PLACE Arduino COM PORT READ CODE HERE 
+		 }
 };
 
 }

@@ -106,7 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="serial.cpp" />
     <ClCompile Include="SockStream.cpp" />
     <ClCompile Include="SpineBio.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -119,7 +118,6 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="serial.h" />
     <ClInclude Include="SockStream.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
