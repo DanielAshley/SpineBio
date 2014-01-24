@@ -16,6 +16,10 @@ void setup() {
 
   // start the SPI library:
   SPI.begin();
+  delay(100);
+  SPI.setBitOrder(MSBFIRST);
+  SPI.setDataMode(SPI_MODE0);
+  
 
   // initalize the  readyInput, conversionStart, and busyPin pins:
   pinMode(readInputPin, OUTPUT);
@@ -24,8 +28,6 @@ void setup() {
 
   // give the sensor time to set up:
   delay(100);
-  
-  delay(1000);
   digitalWrite(conversionStart, LOW);
   digitalWrite(readInputPin, HIGH);
 /*  Serial.print("Con: HIGH   RD: LOW\t");
@@ -45,55 +47,21 @@ void setup() {
 
 void loop() 
 {
-  
-  digitalWrite(readInputPin, LOW);
   byte response = SPI.transfer(0x80);
-  digitalWrite(readInputPin, HIGH);
-  digitalWrite(conversionStart, HIGH);
-  delay(10);
+  byte response2 = SPI.transfer(0x80);
+  byte response2 = SPI.transfer(0x80);
   if(digitalRead(busyPin)==HIGH)
   {
-    Serial.print("Busy HIGH\n");
+    Serial.print("Busy HIGH\t");
   }
   else
   {
-    Serial.print("Busy LOW\n");
+    Serial.print("Busy LOW\t");
   }
-  digitalWrite(conversionStart, LOW);
-  Serial.println(response);
-  
- /* 
-  digitalWrite(conversionStart, LOW);
-  digitalWrite(readInputPin, HIGH);
-  Serial.print("Con: LOW   RD: HIGH\t");
-  delay(1000);
-  if(digitalRead(busyPin)==HIGH)
-  {
-    Serial.print("Busy HIGH\n");
-  }
-  else
-  {
-    Serial.print("Busy LOW\n");
-  }
-
-  delay(1000);
-  digitalWrite(conversionStart, HIGH);
-  digitalWrite(readInputPin, LOW);
-  Serial.print("Con: HIGH   RD: LOW\t");
-  delay(1000);
-  if(digitalRead(busyPin)==HIGH)
-  {
-    Serial.print("Busy HIGH\n");
-  }
-  else
-  {
-    Serial.print("Busy LOW\n");
-  }
-*/ 
-}
-
-void initializeADC()
-{
-  byte dataToSend;
+  Serial.print(response);
+  Serial.print("\t");
+  Serial.println(response2);
+  Serial.print("\t");
+  Serial.println(response3);
 }
 
