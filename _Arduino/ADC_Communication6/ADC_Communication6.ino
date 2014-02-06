@@ -2,7 +2,8 @@
 #define DATAOUT 11//MOSI 
 #define DATAIN  12//MISO 
 #define SPICLOCK  13//Clock 
-#define CONVERT 9
+#define CONVERT 9 // Start Conversion Signal, To ADC
+#define BUSY 8 // Busy Signal, From ADC
 int readvalue; 
 int count;
 int initialized;
@@ -14,6 +15,7 @@ void setup(){
  pinMode(DATAIN, INPUT); 
  pinMode(SPICLOCK, OUTPUT);
  pinMode(CONVERT, OUTPUT); 
+ pinMode(BUSY, INPUT); 
  //disable device to start with 
  digitalWrite(SELPIN,HIGH); 
  digitalWrite(DATAOUT,LOW); 
@@ -29,11 +31,13 @@ int init_adc()
 {
   char commandbits = 0x80; //command bits - Sets to read channel 0 of the ADC
   digitalWrite(SELPIN,LOW); //Select adc
-  for (int i=5; i>=0; i--){
-    int binaryVal = ((commandbits>>i)&1);
-    //Serial.println(binaryVal);
-    digitalWrite(DATAOUT,((commandbits>>i)&1));
-    
+  for (int i=15; i>=0; i--){
+    if(i > 9)
+    {
+      int binaryVal = ((commandbits>>i)&1);
+      //Serial.println(binaryVal);
+      digitalWrite(DATAOUT,((commandbits>>i)&1));
+    }
     //cycle clock
     digitalWrite(SPICLOCK,HIGH);
     digitalWrite(SPICLOCK,LOW);    
@@ -41,7 +45,7 @@ int init_adc()
   digitalWrite(SELPIN, HIGH); //turn off device
   
   digitalWrite(CONVERT,HIGH);
-  delay(1); 
+  delay(10); 
   digitalWrite(CONVERT,LOW);
   initialized = 1;
   
@@ -51,20 +55,21 @@ int read_adc(){
   int adcvalue = 0;
   int commandbits = 0x8000; //command bits - Sets to read channel 0 of the ADC
   boolean inVal;  
-    
+  
+  while(!digitalRead(BUSY)) {} // While Busy is Low, Do Nothing
   //digitalWrite(CONVERT,LOW);
   //delay(1); 
   digitalWrite(SELPIN,LOW); //Select adc
   // setup bits to be written
   for (int i=15; i>=0; i--){
-    int binaryVal = ((commandbits>>i)&1);
-    //Serial.println(binaryVal);
+    boolean binaryVal = ((commandbits>>i)&1);
+    Serial.println(binaryVal);
     digitalWrite(DATAOUT,((commandbits>>i)&1));
     
     //cycle clock
     digitalWrite(SPICLOCK,HIGH);
     inVal = digitalRead(DATAIN);
-    Serial.println(inVal);
+    //Serial.println(inVal);
     adcvalue+=inVal;
     adcvalue = adcvalue << 1;
     digitalWrite(SPICLOCK,LOW);    
@@ -88,8 +93,8 @@ void loop() {
  Serial.println(readvalue,DEC); 
  Serial.println(" ");
  digitalWrite(CONVERT,HIGH);
- delay(1); 
+ delay(10); 
  digitalWrite(CONVERT,LOW);
  
- delay(250); 
+ //delay(250); 
 } 
