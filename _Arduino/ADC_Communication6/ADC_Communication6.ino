@@ -4,6 +4,7 @@
 #define SPICLOCK  13//Clock 
 #define CONVERT 9 // Start Conversion Signal, To ADC
 #define BUSY 8 // Busy Signal, From ADC
+
 int readvalue; 
 int count;
 int initialized;
@@ -29,6 +30,7 @@ void setup(){
 
 int init_adc()
 {
+  Serial.println("INITIALIZING");
   char commandbits = 0x80; //command bits - Sets to read channel 0 of the ADC
   digitalWrite(SELPIN,LOW); //Select adc
   for (int i=15; i>=0; i--){
@@ -45,13 +47,15 @@ int init_adc()
   digitalWrite(SELPIN, HIGH); //turn off device
   
   digitalWrite(CONVERT,HIGH);
-  delay(10); 
+  delay(100); 
   digitalWrite(CONVERT,LOW);
+  Serial.println("INITIALIZED");
   initialized = 1;
   
 }
 
 int read_adc(){
+  //Serial.println("READING");
   int adcvalue = 0;
   int commandbits = 0x8000; //command bits - Sets to read channel 0 of the ADC
   boolean inVal;  
@@ -62,13 +66,14 @@ int read_adc(){
   digitalWrite(SELPIN,LOW); //Select adc
   // setup bits to be written
   for (int i=15; i>=0; i--){
-    boolean binaryVal = ((commandbits>>i)&1);
-    Serial.println(binaryVal);
+    //boolean binaryVal = ((commandbits>>i)&1);
+    //Serial.println(binaryVal);
     digitalWrite(DATAOUT,((commandbits>>i)&1));
     
     //cycle clock
     digitalWrite(SPICLOCK,HIGH);
     inVal = digitalRead(DATAIN);
+    
     //Serial.println(inVal);
     adcvalue+=inVal;
     adcvalue = adcvalue << 1;
@@ -89,11 +94,14 @@ void loop() {
  }*/
  if(!initialized)
    init_adc();
- readvalue = read_adc(); 
- Serial.println(readvalue,DEC); 
- Serial.println(" ");
+ readvalue = read_adc();
+ if(readvalue != 0)
+ {
+   Serial.println(readvalue,DEC);
+   Serial.println(" ");
+ }
  digitalWrite(CONVERT,HIGH);
- delay(10); 
+ delay(100);
  digitalWrite(CONVERT,LOW);
  
  //delay(250); 
