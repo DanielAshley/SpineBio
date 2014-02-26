@@ -249,7 +249,7 @@ namespace SPineBioDynamic {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(320, 185);
+			this->ClientSize = System::Drawing::Size(292, 175);
 			this->Controls->Add(this->labelDynamicTesting);
 			this->Controls->Add(this->textBoxRaiseTime);
 			this->Controls->Add(this->label2);

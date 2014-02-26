@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#define ANALOG_NUM 4
+
 using namespace std;
 
 int testFunction()
@@ -21,15 +23,32 @@ int testFunction()
 	if( m_Client.bIsConnected() )
 	{
 		cout << "Client is connected" << endl;
-		m_Client.GetAnalogTimeStamp();
-		m_Client.sGetLatestResponse();
 		vector<float> m_vAnalog;
-		m_vAnalog.resize( m_Client.nGetNumAnalog() );
-		m_Client.GetLatestAnalog( m_vAnalog );
-	
-		for(int i = 0; i < m_vAnalog.size(); i++)
+		
+		if( m_Client.nSendCommand( "StreamFrames AllFrames" ) == 0 )
 		{
-			cout << "Analog " << i << ": " << m_vAnalog[i] << endl;
+			cout << "Streaming Analog Data" << endl;
+		}
+		
+		if( m_Client.nGetNumAnalog() == 8)
+		{
+			m_vAnalog.resize(m_Client.nGetNumAnalog());
+		}
+		else
+		{
+			cout << "Resize Fail" << endl;
+		}
+
+		while(1)
+		{
+			if( m_vAnalog.size() == 8)
+			{
+				m_Client.GetLatestAnalog( m_vAnalog );
+
+				cout << "Analog " << ANALOG_NUM << ": " << m_vAnalog[ANALOG_NUM] << endl;
+				Sleep(100);
+				cout << endl;
+			}
 		}
 	}
 	else
